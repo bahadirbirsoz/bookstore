@@ -9,11 +9,15 @@ spl_autoload_register(function ($arg) {
 
     $argArr = explode('\\', $arg);
     $className = array_pop($argArr);
-
-    if ($argArr[0] == "Bookstore") {
-
-        $path = strtolower(APP_PATH . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $argArr));
-        echo $path . DIRECTORY_SEPARATOR . $className . ".php";
+    if ($argArr[0] != "Bookstore") {
+        return;
+    }
+    unset($argArr[0]);
+    $path = APP_PATH . DS . strtolower(implode(DS, $argArr)) . DS . $className . ".php";
+    if (file_exists($path)) {
+        require_once $path;
+    } else {
+        throw new Exception("Class $arg not found in $path");
     }
 
 

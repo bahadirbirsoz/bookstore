@@ -1,0 +1,41 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Book List</h5>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Author</th>
+                            <th scope="col">ISBN</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <?php foreach ($books as $index => $book): /* @var $book \Bookstore\Model\Book */ ?>
+                            <tr>
+                                <th scope="row"><?= $index + 1 ?></th>
+                                <td><?= $book->title ?></td>
+                                <td><?= $book->author ?></td>
+                                <td><?= $book->isbn ?></td>
+                                <td>
+                                    <a href="/book/edit/<?= $book->book_id ?>">
+                                        <span class="fa-pencil"></span>
+                                    </a>
+                                    <a href="/book/delete/<?= $book->book_id ?>">
+                                        <span class="fa"></span>
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

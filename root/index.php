@@ -6,8 +6,7 @@ defined('DS') || define('DS', DIRECTORY_SEPARATOR);
 
 include APP_PATH . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
-$app = new Bookstore\App();
+$app = Bookstore\Util\App::getInstance();
 $app->run();
-
 
 

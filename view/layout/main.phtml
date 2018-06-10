@@ -1,0 +1,31 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="/">Bookstore App</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+            aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+
+        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><?= $memberFname ?> <?= $memberLname ?></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">
+                        <span class="fa fa-power-off"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</nav>
+<main role="main" class="container" style="margin-top:100px;">
+
+    <?= $render() ?>
+
+</main>
+
+</div>
