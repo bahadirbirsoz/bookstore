@@ -16,7 +16,6 @@ class LoginController extends ControllerBase
 
     public function mainAction()
     {
-        
         $this->view->setLayout("empty");
         $this->view->setMasterPage("guest");
         $this->view->error = false;

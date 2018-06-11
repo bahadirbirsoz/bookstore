@@ -47,4 +47,9 @@ class Session
         session_destroy();
     }
 
+    public function getSessionId()
+    {
+        return session_id();
+    }
+
 }

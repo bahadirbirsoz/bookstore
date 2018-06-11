@@ -1,0 +1,47 @@
+<?php /* @var $book \Bookstore\Model\Book */ ?>
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <?php if (isset($successMessage)): ?>
+            <div class="alert alert-success">
+                <strong>Success!</strong> The process has been completed successfully.
+            </div>
+
+        <?php endif; ?>
+        <form class="form-horizontal" action="" method="post">
+            <input type="hidden" name="csrf" value="<?= $csrf ?>">
+            <fieldset>
+                <legend class="text-center">Book Information</legend>
+
+                <div class="form-group">
+                    <label class="control-label" for="name">Title</label>
+                    <input id="name" name="title" type="text" placeholder="Title Of The Book"
+                           value="<?= $book->title ?>" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="email">Author</label>
+                    <input id="text" name="author" type="text" value="<?= $book->author ?>"
+                           placeholder="Full Name Of The Author"
+                           class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="email">ISBN</label>
+                    <input id="text" name="isbn" value="<?= $book->isbn ?>" type="text"
+                           placeholder="9-14251532624-6135"
+                           class="form-control">
+                </div>
+
+                <!-- Form actions -->
+                <div class="form-group">
+                    <div class="col-md-12 text-center">
+                        <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+
+
+    </div>
+</div>

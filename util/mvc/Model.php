@@ -13,16 +13,27 @@ class Model
         return strtolower(array_pop($arr));
     }
 
+    public static function camelToSnake($input)
+    {
+        preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $input, $matches);
+        $ret = $matches[0];
+        foreach ($ret as &$match) {
+            $match = $match == strtoupper($match) ? strtolower($match) : lcfirst($match);
+        }
+        return implode('_', $ret);
+    }
+
+
     public static function __callStatic($name, $arguments)
     {
         if (substr($name, 0, 6) == "findBy") {
-            $key = strtolower(substr($name, 6));
+            $key = static::camelToSnake(substr($name, 6));
             return static::find([
                 $key => $arguments[0]
             ]);
         }
         if (substr($name, 0, 9) == "findOneBy") {
-            $key = strtolower(substr($name, 9));
+            $key = static::camelToSnake(substr($name, 9));
             return static::findOne([
                 $key => $arguments[0]
             ]);
@@ -55,13 +66,17 @@ class Model
     public static function find($data = [])
     {
         if (is_numeric($data)) {
-            return static::findById($data);
+            return static::findOne([
+                static::getPK() => $data
+            ]);
         }
         $sql = "SELECT * FROM `" . static::getTable() . "` " . static::where($data);
-        $cacheLayer = App::getInstance()->getCache();
 
+        $cacheLayer = App::getInstance()->getCache();
         $cacheKey = md5($sql . serialize($data));
-        if ($cacheLayer->exists($cacheKey)) {
+
+        if ($cacheLayer->exists($cacheKey) && !defined("DEBUG_MODE")) {
+            die("using cache");
             return unserialize($cacheLayer->get($cacheKey));
         }
         $sth = static::getConnection()->prepare($sql);

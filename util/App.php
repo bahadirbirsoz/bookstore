@@ -12,6 +12,7 @@ use Bookstore\Util\Http\Request;
 use Bookstore\Util\Http\Response;
 use Bookstore\Util\Mvc\Controller;
 use Bookstore\Util\Mvc\View;
+use Bookstore\Util\Security\Csrf;
 
 class App
 {
@@ -24,6 +25,12 @@ class App
      * @var Controller
      */
     private $controller;
+
+
+    /**
+     * @var Csrf
+     */
+    private $csrf;
 
     /**
      * @var View
@@ -72,6 +79,11 @@ class App
     private $validator;
 
     /**
+     * @var Route
+     */
+    protected $activeRoute;
+
+    /**
      * @return App
      */
     public static function getInstance()
@@ -102,27 +114,29 @@ class App
         $this->runView();
     }
 
-    protected function runController()
+    protected function route()
     {
-        $matchedRoute = $this->getRouter()->getMatchRoute();
-
-        $className = $matchedRoute->getRouteClassName();
-        $actionName = $matchedRoute->getRouteActionName();
-        $arguments = $matchedRoute->getArguments();
+        $className = $this->activeRoute->getRouteClassName();
+        $actionName = $this->activeRoute->getRouteActionName();
+        $arguments = $this->activeRoute->getArguments();
         try {
             $this->controller = new $className();
         } catch (\Exception $e) {
-            $matchedRoute = $this->getRouter()->getNotFoundRoute();
-            $className = $matchedRoute->getRouteClassName();
-            $actionName = $matchedRoute->getRouteActionName();
-            $this->controller = new $className();
+            $this->activeRoute = $this->getRouter()->getNotFoundRoute();
+            return $this->route();
+        }
+        $response = call_user_func_array([$this->controller, $actionName], $arguments);
+        if ($response && is_object($response) && get_class($response) == "Bookstore\Util\App\Route") {
+            $this->activeRoute = $response;
+            return $this->route();
         }
 
-        if (count($arguments)) {
-            $this->controller->$actionName($arguments);
-        } else {
-            $this->controller->$actionName();
-        }
+    }
+
+    protected function runController()
+    {
+        $this->activeRoute = $this->getRouter()->getMatchRoute();
+        $this->route();
     }
 
     protected function lockDatabase()
@@ -132,10 +146,9 @@ class App
 
     protected function runView()
     {
-        
 
-        $matchedRoute = $this->getRouter()->getMatchRoute();
-        $this->view->setView($matchedRoute->getController(), $matchedRoute->getAction());
+
+        $this->view->setView($this->activeRoute->getController(), $this->activeRoute->getAction());
         $this->view->render();
     }
 
@@ -223,4 +236,14 @@ class App
         }
         return $this->validator;
     }
+
+    public function getCsrf()
+    {
+        if (!isset($this->csrf)) {
+            $this->csrf = new Csrf();
+        }
+        return $this->csrf;
+    }
+
+
 }

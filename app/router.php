@@ -32,11 +32,6 @@ $router->register(
 
 
 $router->register(
-    App\Route::_(':controller/:action/:param/:param')
-);
-
-
-$router->register(
     App\Route::_(':controller/:action/:params')
 );
 

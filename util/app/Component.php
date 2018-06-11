@@ -10,9 +10,11 @@ namespace Bookstore\Util\App;
 
 
 use Bookstore\Util\App;
+use Bookstore\Util\Cache;
 use Bookstore\Util\Http\Request;
 use Bookstore\Util\Http\Response;
 use Bookstore\Util\Mvc\View;
+use Bookstore\Util\Security\Csrf;
 
 /**
  * Class Component
@@ -22,7 +24,9 @@ use Bookstore\Util\Mvc\View;
  * @property Response $response
  * @property Request $request
  * @property Validator $validator
+ * @property Cache\Redis $cache
  * @property View $view
+ * @property Csrf $csrf
  */
 class Component
 {
@@ -53,6 +57,10 @@ class Component
                 return App::getInstance()->getSession();
             case "validator":
                 return App::getInstance()->getValidator();
+            case "cache":
+                return App::getInstance()->getCache();
+            case "csrf":
+                return App::getInstance()->getCsrf();
         }
         return null;
     }

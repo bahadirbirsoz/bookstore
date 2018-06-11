@@ -13,7 +13,6 @@ class MainController extends ControllerBase
 {
     public function mainAction()
     {
-
         if ($this->auth->isMember()) {
             $this->response->redirect('/book');
         } else {
